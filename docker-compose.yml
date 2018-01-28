@@ -24,11 +24,11 @@ networks:
 
 services:
 
-  cadvisor:
-    extends:
-      file: docker-compose-common.yml
-      service: cadvisor
-    container_name: mesqueteltra-cadvisor1
+#  cadvisor:
+#    extends:
+#      file: docker-compose-common.yml
+#      service: cadvisor
+#    container_name: mesqueteltra-cadvisor1
 
 ###
 # MQTT stack: emqttd + postgres
@@ -75,28 +75,28 @@ services:
 ###
 # ELK stack + logspout
 ###
-  elasticsearch:
-    extends:
-      file: docker-compose-elk-common.yml
-      service: elasticsearch
-    build: dockerfiles/elasticsearch
-    container_name: mesqueteltra-elasticsearch1
-
-  logstash:
-    extends:
-      file: docker-compose-elk-common.yml
-      service: logstash
-    build: dockerfiles/logstash
-    container_name: mesqueteltra-logstash1
-    links:
-      - elasticsearch:elasticsearch
-
-  kibana:
-    extends:
-      file: docker-compose-elk-common.yml
-      service: kibana
-    build: dockerfiles/kibana
-    container_name: mesqueteltra-kibana1
+#  elasticsearch:
+#    extends:
+#      file: docker-compose-elk-common.yml
+#      service: elasticsearch
+#    build: dockerfiles/elasticsearch
+#    container_name: mesqueteltra-elasticsearch1
+#
+#  logstash:
+#    extends:
+#      file: docker-compose-elk-common.yml
+#      service: logstash
+#    build: dockerfiles/logstash
+#    container_name: mesqueteltra-logstash1
+#    links:
+#      - elasticsearch:elasticsearch
+#
+#  kibana:
+#    extends:
+#      file: docker-compose-elk-common.yml
+#      service: kibana
+#    build: dockerfiles/kibana
+#    container_name: mesqueteltra-kibana1
 
   #logspout:
   #  extends:
@@ -113,38 +113,38 @@ services:
 ###
 # TICK stack + grafana
 ###
-  influxdb:
-    extends:
-      file: docker-compose-tick-common.yml
-      service: influxdb
-    build: dockerfiles/influxdb
-    container_name: mesqueteltra-influxdb1
-
-  grafana:
-    extends:
-      file: docker-compose-tick-common.yml
-      service: grafana
-    build: dockerfiles/grafana
-    container_name: mesqueteltra-grafana1
-    depends_on:
-      - influxdb
-      - elasticsearch
-    links:
-      - influxdb:influxdb
-      - elasticsearch:elasticsearch
-
-  telegraf:
-    extends:
-      file: docker-compose-tick-common.yml
-      service: telegraf
-    build: dockerfiles/telegraf
-    container_name: mesqueteltra-telegraf1
-    depends_on:
-      - influxdb
-      - elasticsearch
-    links:
-      - influxdb:influxdb
-      - elasticsearch:elasticsearch
+#  influxdb:
+#    extends:
+#      file: docker-compose-tick-common.yml
+#      service: influxdb
+#    build: dockerfiles/influxdb
+#    container_name: mesqueteltra-influxdb1
+#
+#  grafana:
+#    extends:
+#      file: docker-compose-tick-common.yml
+#      service: grafana
+#    build: dockerfiles/grafana
+#    container_name: mesqueteltra-grafana1
+#    depends_on:
+#      - influxdb
+#      - elasticsearch
+#    links:
+#      - influxdb:influxdb
+#      - elasticsearch:elasticsearch
+#
+#  telegraf:
+#    extends:
+#      file: docker-compose-tick-common.yml
+#      service: telegraf
+#    build: dockerfiles/telegraf
+#    container_name: mesqueteltra-telegraf1
+#    depends_on:
+#      - influxdb
+#      - elasticsearch
+#    links:
+#      - influxdb:influxdb
+#      - elasticsearch:elasticsearch
 ###
 # TICK stack + grafana (end)
 ###
