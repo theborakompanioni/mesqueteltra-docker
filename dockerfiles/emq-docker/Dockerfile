@@ -4,7 +4,8 @@ MAINTAINER Huang Rui <vowstar@gmail.com>, Turtle <turtled@emqtt.io>
 
 ENV EMQ_VERSION=v2.3.3
 
-COPY ./start.sh /start.sh
+COPY ./start.sh /tmp/start.sh
+COPY ./etc /tmp/etc
 
 RUN set -ex \
     # add build deps, remove after build
@@ -83,8 +84,10 @@ RUN set -ex \
     && make \
     && mkdir -p /opt && mv /emqttd/_rel/emqttd /opt/emqttd \
     && cd / && rm -rf /emqttd \
-    && mv /start.sh /opt/emqttd/start.sh \
+    && mv /tmp/start.sh /opt/emqttd/start.sh \
     && chmod +x /opt/emqttd/start.sh \
+    && mkdir -p /opt/emqttd/etc/plugins \
+    && cp -R /tmp/etc/* /opt/emqttd/etc \
     && ln -s /opt/emqttd/bin/* /usr/local/bin/ \
     # removing fetch deps and build deps
     && apk --purge del .build-deps .fetch-deps \

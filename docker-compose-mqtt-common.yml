@@ -12,8 +12,8 @@ services:
       - mqtt
     ports:
       - "5432:5432"
-    volumes:
-    - /docker-data/mqtt-stuff/postgresql/data:/var/lib/postgresql/data
+    #volumes:
+    #- ./docker-data/mqtt-stuff/postgresql/data:/var/lib/postgresql/data
 
   postgres-provisioning:
     networks:
@@ -32,13 +32,15 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=mqtt
-      - EMQ_LOADED_PLUGINS=emq_recon,emq_modules,emq_retainer,emq_dashboard
+      - EMQ_LOADED_PLUGINS=emq_auth_pgsql,emq_recon,emq_modules,emq_retainer,emq_dashboard
       - EMQ_LOG__CONSOLE__LEVEL=debug
       - EMQ_LOG__SYSLOG__LEVEL=debug
+      - EMQ_MQTT__ALLOW_ANONYMOUS=false
+      - EMQ_ACL_NOMATCH=deny
     ports:
       - "1883:1883"
       - "8083:8083"
       - "8883:8883"
       - "18083:18083"
     volumes:
-      - ./docker-data/mqtt-stuff/emqttd/log:/opt/emqtt/log
+      - ./docker-data/mqtt-stuff/emqttd/log:/opt/emqttd/log
