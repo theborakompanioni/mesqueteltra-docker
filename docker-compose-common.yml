@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+
+  ## cadvisor: resource usage and performance of containers
+  cadvisor:
+    image: google/cadvisor:latest
+    restart: unless-stopped
+    volumes:
+      - /c/:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "13101:8080"
+
+  #consul:
+  #  image: qnib/consul
+  #  restart: unless-stopped
+  #  privileged: true
+  #  environment:
+  #    - DC_NAME=qnib
+  #    - RUN_SERVER=true
+  #    - BOOTSTRAP_CONSUL=true
+  #  volumes:
+  #    - ./docker-data/consul/data:/consul/data:rw
+  #    - ./dockerfiles/consul/config:/consul/config:ro
+  #  dns: 127.0.0.1
+  #  ports:
+  #    - "8500:8500"
+

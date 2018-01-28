@@ -1,0 +1,152 @@
+version: '2'
+
+networks:
+  mqtt:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
+        gateway: 172.16.238.254
+        ip-range: 172.16.238.0/24
+  logging:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.203.0.0/16
+  metrics:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.204.0.0/16
+
+services:
+
+  cadvisor:
+    extends:
+      file: docker-compose-common.yml
+      service: cadvisor
+    container_name: mesqueteltra-cadvisor1
+
+###
+# MQTT stack: emqttd + postgres
+###
+
+  #postgres:
+  #  image: postgres:9.5.2
+  #  extends:
+  #    file: docker-compose-mqtt-common.yml
+  #    service: postgres
+  #  container_name: mesqueteltra-postgres1
+
+  #postgres-provisioning:
+  #  extends:
+  #    file: docker-compose-mqtt-common.yml
+  #    service: postgres-provisioning
+  #  build:
+  #    context: ./dockerfiles/postgres
+  #    dockerfile: Dockerfile
+  #  container_name: mesqueteltra-postgres-provisioning1
+  #  depends_on:
+  #    - postgres
+  #  links:
+  #    - postgres:postgres
+
+  mqtt-master:
+    extends:
+      file: docker-compose-mqtt-common.yml
+      service: mqtt-master
+    build:
+    #  context: ./dockerfiles/emqttd
+    #  dockerfile: Dockerfile
+      context: ./dockerfiles/emq-docker
+      dockerfile: Dockerfile
+    container_name: mesqueteltra-mqtt-master1
+    #depends_on:
+    #  - postgres
+    #  - postgres-provisioning
+    #links:
+    #  - postgres:postgres
+
+###
+# MQTT stack: emqttd + postgres
+###
+
+###
+# ELK stack + logspout
+###
+  elasticsearch:
+    extends:
+      file: docker-compose-elk-common.yml
+      service: elasticsearch
+    build: dockerfiles/elasticsearch
+    container_name: mesqueteltra-elasticsearch1
+
+  logstash:
+    extends:
+      file: docker-compose-elk-common.yml
+      service: logstash
+    build: dockerfiles/logstash
+    container_name: mesqueteltra-logstash1
+    links:
+      - elasticsearch:elasticsearch
+
+  kibana:
+    extends:
+      file: docker-compose-elk-common.yml
+      service: kibana
+    build: dockerfiles/kibana
+    container_name: mesqueteltra-kibana1
+
+  #logspout:
+  #  extends:
+  #    file: docker-compose-elk-common.yml
+  #    service: logspout
+  #  container_name: mesqueteltra-logspout1
+  #  links:
+  #    - logstash:logstash
+###
+# ELK stack + logspout (end)
+###
+
+
+###
+# TICK stack + grafana
+###
+  influxdb:
+    extends:
+      file: docker-compose-tick-common.yml
+      service: influxdb
+    build: dockerfiles/influxdb
+    container_name: mesqueteltra-influxdb1
+
+  grafana:
+    extends:
+      file: docker-compose-tick-common.yml
+      service: grafana
+    build: dockerfiles/grafana
+    container_name: mesqueteltra-grafana1
+    depends_on:
+      - influxdb
+      - elasticsearch
+    links:
+      - influxdb:influxdb
+      - elasticsearch:elasticsearch
+
+  telegraf:
+    extends:
+      file: docker-compose-tick-common.yml
+      service: telegraf
+    build: dockerfiles/telegraf
+    container_name: mesqueteltra-telegraf1
+    depends_on:
+      - influxdb
+      - elasticsearch
+    links:
+      - influxdb:influxdb
+      - elasticsearch:elasticsearch
+###
+# TICK stack + grafana (end)
+###
