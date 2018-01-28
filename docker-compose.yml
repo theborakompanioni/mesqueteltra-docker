@@ -34,19 +34,19 @@ services:
 # MQTT stack: emqttd + postgres
 ###
 
-  #postgres:
-  #  image: postgres:9.5.2
-  #  extends:
-  #    file: docker-compose-mqtt-common.yml
-  #    service: postgres
-  #  container_name: mesqueteltra-postgres1
+  postgres:
+    image: postgres:10.1-alpine
+    extends:
+      file: docker-compose-mqtt-common.yml
+      service: postgres
+    container_name: mesqueteltra-postgres1
 
   #postgres-provisioning:
   #  extends:
   #    file: docker-compose-mqtt-common.yml
   #    service: postgres-provisioning
   #  build:
-  #    context: ./dockerfiles/postgres
+  #    context: ./dockerfiles/postgres-provisioning
   #    dockerfile: Dockerfile
   #  container_name: mesqueteltra-postgres-provisioning1
   #  depends_on:

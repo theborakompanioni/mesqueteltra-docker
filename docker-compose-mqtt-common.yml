@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-    - /var/lib/containers/postgresql/data:/var/lib/postgresql/data
+    - /docker-data/mqtt-stuff/postgresql/data:/var/lib/postgresql/data
 
   #postgres-provisioning:
   #  networks:
