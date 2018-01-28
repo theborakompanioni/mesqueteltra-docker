@@ -41,34 +41,32 @@ services:
       service: postgres
     container_name: mesqueteltra-postgres1
 
-  #postgres-provisioning:
-  #  extends:
-  #    file: docker-compose-mqtt-common.yml
-  #    service: postgres-provisioning
-  #  build:
-  #    context: ./dockerfiles/postgres-provisioning
-  #    dockerfile: Dockerfile
-  #  container_name: mesqueteltra-postgres-provisioning1
-  #  depends_on:
-  #    - postgres
-  #  links:
-  #    - postgres:postgres
+  postgres-provisioning:
+    extends:
+      file: docker-compose-mqtt-common.yml
+      service: postgres-provisioning
+    build:
+      context: ./dockerfiles/postgres-provisioning
+      dockerfile: Dockerfile
+    container_name: mesqueteltra-postgres-provisioning1
+    depends_on:
+      - postgres
+    links:
+      - postgres:postgres
 
   mqtt-master:
     extends:
       file: docker-compose-mqtt-common.yml
       service: mqtt-master
     build:
-    #  context: ./dockerfiles/emqttd
-    #  dockerfile: Dockerfile
       context: ./dockerfiles/emq-docker
       dockerfile: Dockerfile
     container_name: mesqueteltra-mqtt-master1
-    #depends_on:
-    #  - postgres
-    #  - postgres-provisioning
-    #links:
-    #  - postgres:postgres
+    depends_on:
+      - postgres
+      - postgres-provisioning
+    links:
+      - postgres:postgres
 
 ###
 # MQTT stack: emqttd + postgres

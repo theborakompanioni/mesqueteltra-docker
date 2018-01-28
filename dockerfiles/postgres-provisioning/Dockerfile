@@ -1,4 +1,4 @@
-FROM postgres:9.5.2
+FROM postgres:10.1-alpine
 
 COPY ./data /app
 WORKDIR /app
