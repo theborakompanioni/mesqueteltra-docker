@@ -15,20 +15,6 @@ services:
     volumes:
       - ./docker-data/elk-stuff/elasticsearch/:/opt/elasticsearch/data
 
-  logstash:
-    restart: unless-stopped
-    ports:
-      - "5000:5000"
-      - "5000:5000/udp"
-    networks:
-      - logging
-    environment:
-      - LOGSPOUT=ignore # otherwise logstash will keep sending its own logs to itself
-    command: -f /etc/logstash.sample.conf
-    logging:
-      driver: none
-
-
   kibana:
     restart: unless-stopped
     ports:
@@ -37,16 +23,3 @@ services:
       - logging
     environment:
       - LOGSPOUT=ignore
-
-  logspout:
-    image: gliderlabs/logspout:master
-    restart: unless-stopped
-    environment:
-      - DEBUG=true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "13601:80"
-    networks:
-      - logging
-    command: syslog://logstash:5000

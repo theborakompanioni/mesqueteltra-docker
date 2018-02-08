@@ -44,3 +44,12 @@ services:
       - "18083:18083"
     volumes:
       - ./docker-data/mqtt-stuff/emqttd/log:/opt/emqttd/log
+
+  node-red:
+    restart: unless-stopped
+    networks:
+      - mqtt
+    ports:
+      - "11880:1880"
+    volumes:
+      - ./docker-data/mqtt-stuff/node-red/data:/data
