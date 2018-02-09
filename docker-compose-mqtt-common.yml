@@ -1,6 +1,7 @@
 version: '2'
 
 services:
+
   postgres:
     restart: unless-stopped
     environment:
@@ -11,9 +12,10 @@ services:
     networks:
       - mqtt
     ports:
-      - "5432:5432"
+      - "15432:5432"
+    ## Disabled volumes because of https://github.com/docker/for-win/issues/39
     #volumes:
-    #- ./docker-data/mqtt-stuff/postgresql/data:/var/lib/postgresql/data
+    #  - ./docker-data/mqtt-stuff/postgresql/data:/var/lib/postgresql/data
 
   postgres-provisioning:
     networks:
