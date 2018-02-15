@@ -55,3 +55,10 @@ services:
       - "11880:1880"
     volumes:
       - ./docker-data/mqtt-stuff/node-red/data:/data
+
+  nifi:
+    restart: unless-stopped
+    networks:
+      - mqtt
+    ports:
+      - "11881:8080"

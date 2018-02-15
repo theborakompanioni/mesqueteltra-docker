@@ -74,6 +74,15 @@ services:
       file: docker-compose-mqtt-common.yml
       service: node-red
     container_name: mesqueteltra-node-red1
+
+  nifi:
+    image: anoopnair/nifi-alpine:latest
+    extends:
+      file: docker-compose-mqtt-common.yml
+      service: nifi
+    container_name: mesqueteltra-nifi1
+    links:
+      - elasticsearch:elasticsearch
 ###
 # MQTT stack: emqttd + postgres
 ###
@@ -81,12 +90,12 @@ services:
 ###
 # ELK stack + logspout
 ###
-#  elasticsearch:
-#    extends:
-#      file: docker-compose-elk-common.yml
-#      service: elasticsearch
-#    build: dockerfiles/elasticsearch
-#    container_name: mesqueteltra-elasticsearch1
+  elasticsearch:
+    extends:
+      file: docker-compose-elk-common.yml
+      service: elasticsearch
+    build: dockerfiles/elasticsearch
+    container_name: mesqueteltra-elasticsearch1
 #
 #  logstash:
 #    extends:
@@ -96,13 +105,13 @@ services:
 #    container_name: mesqueteltra-logstash1
 #    links:
 #      - elasticsearch:elasticsearch
-#
-#  kibana:
-#    extends:
-#      file: docker-compose-elk-common.yml
-#      service: kibana
-#    build: dockerfiles/kibana
-#    container_name: mesqueteltra-kibana1
+
+  kibana:
+    extends:
+      file: docker-compose-elk-common.yml
+      service: kibana
+    build: dockerfiles/kibana
+    container_name: mesqueteltra-kibana1
 
   #logspout:
   #  extends:
